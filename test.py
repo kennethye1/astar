@@ -1,5 +1,6 @@
 import pygame
 from queue import PriorityQueue
+from queue import Queue 
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -94,6 +95,27 @@ def get_path(start, screen):
     temp.color = PEACH
     temp.draw(screen)
 
+def bfs(grid, start, target):
+    #breadth-first-search
+    queue = Queue()
+    queue.put(start)
+    discovered = {start}
+    while not queue.empty():
+        curr = queue.get()
+        curr.color = RED
+        curr.draw(grid.screen)
+        if curr == target:
+            get_path(curr, grid.screen)
+            return True
+        for neighbor in grid.get_neighbors(curr):
+            if neighbor not in discovered and not neighbor.blocked:
+                neighbor.color = GREEN
+                neighbor.draw(grid.screen)
+                discovered.add(neighbor)
+                neighbor.parent = curr
+                queue.put(neighbor)
+    return False
+
 def astar(grid, start, target):
     open_q = PriorityQueue()
     start.g_cost = 0
@@ -111,7 +133,7 @@ def astar(grid, start, target):
             get_path(curr, grid.screen)
             return True
         for neighbor in grid.get_neighbors(curr):
-            if neighbor.color == BLUE or neighbor in closed:
+            if neighbor.blocked or neighbor in closed:
                 continue
             new_cost = curr.g_cost + heuristic(curr, neighbor)
             if new_cost < neighbor.g_cost:
@@ -127,7 +149,27 @@ def astar(grid, start, target):
                 
     return False
 
-
+def greedy_bfs(grid, start, target):
+    priority = PriorityQueue()
+    discovered = {start}
+    priority.put((heuristic(start, target), start))
+    while not priority.empty():
+        curr = priority.get()[1]
+        curr.color = RED
+        curr.draw(grid.screen)
+        if curr == target:
+            get_path(curr, grid.screen)
+            return True
+        for neighbor in grid.get_neighbors(curr):
+            if neighbor.blocked or neighbor in discovered:
+                continue 
+            neighbor.parent = curr
+            neighbor.color = GREEN
+            neighbor.draw(grid.screen)
+            priority.put((heuristic(neighbor, target), neighbor))
+            discovered.add(neighbor)
+            
+    return False
 
 def main(screen, length, width, size):
     screen.fill(WHITE)
@@ -171,6 +213,18 @@ def main(screen, length, width, size):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and start and target:
                     astar(grid, start, target)
+
+                elif event.key == pygame.K_b and start and target:
+                    bfs(grid, start, target)
+
+                elif event.key == pygame.K_g and start and target:
+                    greedy_bfs(grid, start, target)
+
+                elif event.key == pygame.K_c:
+                    start = target = None
+                    grid = Grid(length, width, screen, size)
+                    grid.draw()
+                
         grid.draw_lines()
         pygame.display.update()       
     pygame.quit()
