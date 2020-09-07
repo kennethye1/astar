@@ -14,7 +14,7 @@ LENGTH = 800
 WIDTH = 500
 pygame.init()
 SCREEN = pygame.display.set_mode((LENGTH, WIDTH))
-
+pygame.display.set_caption("Algorithm Visualization")
 class Cell():
     
     def __init__(self, row, col, size):
