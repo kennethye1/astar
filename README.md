@@ -5,6 +5,6 @@ and A* (astar).
 
 The first left-click will be the start node with the 2nd  being the target. To erase, use right click.
 
-Press 'g' to use greedybfs, 'b' for BFS, 'space' for A* and to clear and reset everything, press 'c'. 
+The blue blocks indicate walls with peach being the start and violet being the target. Red indicates nodes that were visited and green for which neighbors were checked for. 
 
 ![ScreenShot](https://github.com/kennethye1/astar/blob/master/pictures/Screenshot%20(4).png)
