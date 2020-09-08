@@ -6,3 +6,5 @@ and A* (astar).
 The first left-click will be the start node with the 2nd  being the target. To erase, use right click.
 
 Press 'g' to use greedybfs, 'b' for BFS, 'space' for A* and to clear and reset everything, press 'c'. 
+
+![ScreenShot](https://github.com/kennethye1/astar/blob/master/pictures/Screenshot%20(2).png)
